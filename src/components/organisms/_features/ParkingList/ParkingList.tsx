@@ -6,13 +6,14 @@ import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
 
 type ListResultStatus = "Available" | "Occupied";
+type VehicleType = "Car" | "Motorcycle" | undefined;
 
 type ListResult = {
   parkingSpace: string;
   status: ListResultStatus;
   startTime: string;
   endTime: string;
-  vehicleType: string;
+  vehicleType: VehicleType;
   licensePlate: string;
 }[];
 
@@ -22,7 +23,7 @@ const listResult: ListResult = [
     status: "Occupied",
     startTime: "2023-10-01T08:00:00Z",
     endTime: "2023-10-01T10:00:00Z",
-    vehicleType: "Sedan",
+    vehicleType: "Car",
     licensePlate: "ABC123",
   },
   {
@@ -30,7 +31,7 @@ const listResult: ListResult = [
     status: "Available",
     startTime: "",
     endTime: "",
-    vehicleType: "",
+    vehicleType: undefined,
     licensePlate: "",
   },
   {
@@ -38,7 +39,7 @@ const listResult: ListResult = [
     status: "Occupied",
     startTime: "2023-10-01T09:00:00Z",
     endTime: "2023-10-01T11:00:00Z",
-    vehicleType: "SUV",
+    vehicleType: "Motorcycle",
     licensePlate: "XYZ789",
   },
 ];
