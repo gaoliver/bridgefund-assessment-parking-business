@@ -13,5 +13,6 @@
       "label": "Non-Residents Motorcycles",
       "description": "This chart shows the total number of non-residents motorcycles parked now."
     }
-  }
+  },
+  "ctaLabel": "See complete list"
 }

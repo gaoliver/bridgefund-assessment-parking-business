@@ -23,9 +23,3 @@
   min-height: 80%;
   margin-top: var(--spacing-sm);
 }
-
-.charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-  gap: var(--spacing-lg);
-}
