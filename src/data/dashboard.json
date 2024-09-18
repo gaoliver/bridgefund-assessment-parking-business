@@ -1,12 +1,17 @@
 {
   "title": "Dashboard",
   "overview": {
-    "total": {
-      "label": "Total",
+    "residents": {
+      "label": "Residents",
       "description": "This chart shows the total number of parking spots occupied now."
     },
-    "residents": {
-      "label": "Residents"
+    "nonResidentsCars": {
+      "label": "Non-Resisidents Cars",
+      "description": "This chart shows the total number of non-residents cars parked now."
+    },
+    "nonResidentsMotorcyles": {
+      "label": "Non-Residents Motorcycles",
+      "description": "This chart shows the total number of non-residents motorcycles parked now."
     }
   }
 }
