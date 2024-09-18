@@ -14,11 +14,17 @@
   color: var(--color-white);
 }
 
-.primary:hover {
+.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+
+:is(.primary, .secondary):hover {
   filter: brightness(1.2);
 }
 
-.primary:active {
+:is(.primary, .secondary):active {
   transform: scale(0.98);
+  filter: brightness(0.9);
   box-shadow: none;
 }
