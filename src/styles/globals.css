@@ -34,7 +34,8 @@
 
   --color-background: var(--color-white);
   --color-foreground: var(--color-black);
-  --color-warning: var(--color-red);
+  --color-danger: var(--color-red);
+  --color-warning: var(--color-yellow);
   --color-success: var(--color-green);
   --color-info: var(--color-blue);
 

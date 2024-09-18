@@ -18,7 +18,7 @@ export default function Login() {
           <TextInput label="Password" name="password" type="password" />
         </div>
 
-        <Button element="button" variant="primary">
+        <Button variant="primary">
           Login
         </Button>
       </Card>

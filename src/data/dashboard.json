@@ -14,5 +14,21 @@
       "description": "This chart shows the total number of non-residents motorcycles parked now."
     }
   },
-  "ctaLabel": "See complete list"
+  "list": {
+    "title": "Parking Spots",
+    "columns": {
+      "parkingSpace": "Parking space",
+      "status": "Status",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "vehicleType": "Vehicle type",
+      "licensePlate": "License plate",
+      "action": {
+        "label": "Action",
+        "buttons": {
+          "endParking": "End parking"
+        }
+      }
+    }
+  }
 }
