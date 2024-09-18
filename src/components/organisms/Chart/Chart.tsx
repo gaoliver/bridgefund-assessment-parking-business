@@ -1,7 +1,7 @@
 import { Card } from "@/components/atoms";
 import styles from "./Chart.module.css";
 import React from "react";
-import { keyGenerator } from "@/utils/keyGenerator";
+import { slugGenerator } from "@/utils/slugGenerator";
 
 interface ChartProps {
   title: string;
@@ -13,7 +13,7 @@ interface ChartProps {
 export const Chart: React.FC<ChartProps> = ({
   title,
   description,
-  rows,
+  rows = [],
   style,
 }) => {
   return (
@@ -21,16 +21,16 @@ export const Chart: React.FC<ChartProps> = ({
       <h2 className={styles.title}>{title}</h2>
       <p className={styles.description}>{description}</p>
 
-      {!!rows?.length && (
-        <table className={styles.table}>
-          {rows?.map((row) => (
-            <tr key={keyGenerator(row.label)}>
+      <table className={styles.table}>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={slugGenerator(row.label)}>
               <td>{row.label.toUpperCase()}</td>
               <td>{row.value.toUpperCase()}</td>
             </tr>
           ))}
-        </table>
-      )}
+        </tbody>
+      </table>
     </Card>
   );
 };
