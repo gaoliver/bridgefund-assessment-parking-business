@@ -6,6 +6,13 @@
   background-color: var(--color-primary-light);
 }
 
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: var(--spacing-lg) 0;
+}
+
 .ctas {
   display: flex;
   gap: 16px;

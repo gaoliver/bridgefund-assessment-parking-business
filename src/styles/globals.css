@@ -1,6 +1,7 @@
 :root {
   font-size: 16px;
 
+  /* Colors */
   --color-primary: #51658C;
   --color-primary-light: #A7CFF2;
   --color-secondary: #565902;
@@ -33,7 +34,26 @@
   --color-success: var(--color-green);
   --color-info: var(--color-blue);
 
+  /* Shadows */
   --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Spacing */
+  --spacing-xxs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-xxl: 4rem;
+  --spacing-3xl: 6rem;
+  --spacing-4xl: 8rem;
+
+  /* Border radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+
+  /* Breakpoints */
 }
 
 html,
