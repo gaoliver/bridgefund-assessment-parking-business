@@ -1,17 +1,12 @@
 import { colors } from "@/constants/colors";
 import PageData from "@/data/dashboard.json";
-import { Button } from "@/components/atoms";
 import { Chart } from "../../Chart";
 import styles from "./Overview.module.css";
 
 export const Overview = () => {
   return (
     <>
-      <header className={styles.header}>
-        <h1>{PageData.title}</h1>
-
-        <Button>See complete list</Button>
-      </header>
+      <h1>{PageData.title}</h1>
 
       <section className={styles.charts}>
         <Chart
