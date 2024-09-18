@@ -1,8 +1,12 @@
 import React, { PropsWithChildren } from 'react'
 import styles from './Card.module.css'
 
-export const Card: React.FC<PropsWithChildren> = ({children}) => {
+interface CardProps extends PropsWithChildren {
+  style?: React.CSSProperties
+}
+
+export const Card: React.FC<CardProps> = ({children, style}) => {
   return (
-    <div className={styles.component}>{children}</div>
+    <div className={styles.component} style={style}>{children}</div>
   )
 }
