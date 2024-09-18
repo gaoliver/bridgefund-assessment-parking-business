@@ -69,15 +69,16 @@ export const ParkingList = () => {
           {listResult.map((item, index) => (
             <tr key={index}>
               <td>{item.parkingSpace}</td>
-              <td className={styles.status}
+              <td
+                className={styles.status}
                 style={{
                   color: getStatusColor(item.status),
                 }}
               >
                 {item.status}
               </td>
-              <td>{formatDate(item.startTime)}</td>
-              <td>{formatDate(item.endTime)}</td>
+              <td>{item.startTime ? formatDate(item.startTime) : null}</td>
+              <td>{item.endTime ? formatDate(item.endTime) : null}</td>
               <td>{item.vehicleType}</td>
               <td>{item.licensePlate}</td>
               <td>
