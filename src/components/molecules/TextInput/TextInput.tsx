@@ -14,7 +14,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.component}>
       <label htmlFor={name}>{label}</label>
       <div className={styles.field_wrapper}>
         <input

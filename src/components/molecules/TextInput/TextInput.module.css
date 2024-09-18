@@ -1,9 +1,9 @@
-.wrapper {
+.component {
   display: flex;
   flex-direction: column;
 }
 
-.wrapper label {
+.component label {
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: var(--spacing-xs);

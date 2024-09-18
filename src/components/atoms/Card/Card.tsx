@@ -3,6 +3,6 @@ import styles from './Card.module.css'
 
 export const Card: React.FC<PropsWithChildren> = ({children}) => {
   return (
-    <div className={styles.card}>{children}</div>
+    <div className={styles.component}>{children}</div>
   )
 }
