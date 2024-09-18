@@ -3,22 +3,23 @@ import styles from "./Button.module.css";
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   children: React.ReactNode;
-  element?: "button" | "a";
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
+  type?: "button" | "submit" | "reset";
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
-  element,
   variant = "primary",
+  type = "button",
+  ...props
 }) => {
-  const Element = element || "button";
-
   return (
-    <Element
+    <button
       className={`${styles.component} ${variant ? styles[variant] : ""}`}
+      type={type}
+      {...props}
     >
       {children}
-    </Element>
+    </button>
   );
 };

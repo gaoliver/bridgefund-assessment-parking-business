@@ -1,12 +1,12 @@
 import { Header } from "@/components/organisms";
-import React, { useState } from "react";
+import React from "react";
 import styles from "@/styles/dashboard.module.css";
 import { Overview } from "@/components/organisms/_features/Overview/Overview";
-
-type ActiveContent = "overview" | "list";
+import { ParkingList } from "@/components/organisms/_features/ParkingList";
+import useDashboardStore from "@/zustand/dashboard";
 
 export const Page = () => {
-  const [activeContent, setActiveContent] = useState<ActiveContent>("overview");
+  const { activeContent } = useDashboardStore();
 
   return (
     <div className={styles.page}>
@@ -15,10 +15,11 @@ export const Page = () => {
       <main className={styles.container}>
         <div className={styles.content}>
           {activeContent === "overview" && <Overview />}
+          {activeContent === "list" && <ParkingList />}
         </div>
       </main>
     </div>
   );
-}
+};
 
 export default Page;
