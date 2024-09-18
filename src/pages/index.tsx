@@ -1,4 +1,4 @@
-import { Card } from "@/components/atoms";
+import { Button, Card } from "@/components/atoms";
 import { TextInput } from "@/components/molecules";
 import styles from "@/styles/login.module.css";
 
@@ -13,7 +13,7 @@ export default function Login() {
           <TextInput label="Password" name="password" type="password" />
         </div>
 
-        <div className={styles.ctas}>login button</div>
+        <Button element="button" variant="primary">Login</Button>
       </Card>
     </main>
   );
