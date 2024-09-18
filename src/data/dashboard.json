@@ -1,0 +1,12 @@
+{
+  "title": "Dashboard",
+  "overview": {
+    "total": {
+      "label": "Total",
+      "description": "This chart shows the total number of parking spots occupied now."
+    },
+    "residents": {
+      "label": "Residents"
+    }
+  }
+}
