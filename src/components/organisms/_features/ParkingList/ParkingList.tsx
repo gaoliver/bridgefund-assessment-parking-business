@@ -4,6 +4,7 @@ import styles from "./ParkingList.module.css";
 import { Button } from "@/components/atoms";
 import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
+import { Filters } from "../Filters";
 
 type ListResultStatus = "Available" | "Occupied";
 type VehicleType = "Car" | "Motorcycle" | undefined;
@@ -51,9 +52,8 @@ const getStatusColor = (status: ListResultStatus) => {
 export const ParkingList = () => {
   return (
     <>
-      <header>
-        <h1></h1>
-      </header>
+      <Filters />
+
       <table className={styles.table}>
         <thead>
           <tr>
