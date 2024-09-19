@@ -19,8 +19,8 @@ export type UserResponse = {
 };
 
 export enum VehicleType {
-  CAR,
-  MOTOR,
+  CAR = "Car",
+  MOTOR = "Motorcycle",
 }
 
 export type StartParkingSessionDto = {

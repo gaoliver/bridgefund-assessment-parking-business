@@ -6,12 +6,12 @@ import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
 import { Filters } from "../Filters";
 import useFilterStore, { SectionType, Status } from "@/zustand/filters";
+import { VehicleType } from "@/types/api";
 
-type VehicleType = "Car" | "Motorcycle" | undefined;
 type TableSectionType = Omit<SectionType, "all">;
 type TableStatus = Omit<Status, "all">;
 
-type ListResult = {
+type ParkingList = {
   parkingSpace: string;
   sectionType: TableSectionType;
   status: TableStatus;
@@ -21,14 +21,14 @@ type ListResult = {
   licensePlate: string;
 }[];
 
-const listResult: ListResult = [
+const listResult: ParkingList = [
   {
     parkingSpace: "A1",
     sectionType: "Residents",
     status: "Occupied",
     startTime: "2023-10-01T08:00:00Z",
     endTime: "2023-10-01T10:00:00Z",
-    vehicleType: "Car",
+    vehicleType: VehicleType.CAR,
     licensePlate: "ABC123",
   },
   {
@@ -37,7 +37,7 @@ const listResult: ListResult = [
     status: "Available",
     startTime: "",
     endTime: "",
-    vehicleType: undefined,
+    vehicleType: VehicleType.CAR,
     licensePlate: "",
   },
   {
@@ -46,7 +46,7 @@ const listResult: ListResult = [
     status: "Occupied",
     startTime: "2023-10-01T09:00:00Z",
     endTime: "2023-10-01T11:00:00Z",
-    vehicleType: "Motorcycle",
+    vehicleType: VehicleType.MOTOR,
     licensePlate: "XYZ789",
   },
 ];
@@ -59,7 +59,7 @@ export const ParkingList = () => {
   const { searchQuery, sectionType, sortBy, status, vehicleType } =
     useFilterStore();
 
-  const filterSectionType = (item: ListResult[0]) => {
+  const filterSectionType = (item: ParkingList[0]) => {
     if (sectionType !== "all") {
       if (sectionType === "residents" && item.sectionType !== "Residents") {
         return false;
@@ -67,7 +67,8 @@ export const ParkingList = () => {
 
       if (
         sectionType === "non-residents-cars" &&
-        (item.sectionType !== "Non-residents" || item.vehicleType !== "Car")
+        (item.sectionType !== "Non-residents" ||
+          item.vehicleType !== VehicleType.CAR)
       ) {
         return false;
       }
@@ -75,7 +76,7 @@ export const ParkingList = () => {
       if (
         sectionType === "non-residents-motorcycles" &&
         (item.sectionType !== "Non-residents" ||
-          item.vehicleType !== "Motorcycle")
+          item.vehicleType !== VehicleType.MOTOR)
       ) {
         return false;
       }
@@ -84,7 +85,7 @@ export const ParkingList = () => {
     return true;
   };
 
-  const filterStatus = (item: ListResult[0]) => {
+  const filterStatus = (item: ParkingList[0]) => {
     if (status !== "all") {
       if (status === "available" && item.status !== "Available") {
         return false;
@@ -98,18 +99,15 @@ export const ParkingList = () => {
     return true;
   };
 
-  const filterVehicleType = (item: ListResult[0]) => {
-    if (
-      vehicleType !== "all" &&
-      item.vehicleType?.toLowerCase() !== vehicleType
-    ) {
+  const filterVehicleType = (item: ParkingList[0]) => {
+    if (vehicleType !== "all" && item.vehicleType !== vehicleType) {
       return false;
     }
 
     return true;
   };
 
-  const handleSortBy = (a: ListResult[0], b: ListResult[0]) => {
+  const handleSortBy = (a: ParkingList[0], b: ParkingList[0]) => {
     if (sortBy === "parkingSpace") {
       return a.parkingSpace.localeCompare(b.parkingSpace);
     }
@@ -123,7 +121,9 @@ export const ParkingList = () => {
       return a.endTime.localeCompare(b.endTime);
     }
     if (sortBy === "vehicleType") {
-      return (a.vehicleType || "").localeCompare(b.vehicleType || "");
+      return (a.vehicleType.toString() || "").localeCompare(
+        b.vehicleType.toString() || ""
+      );
     }
     return 0;
   };

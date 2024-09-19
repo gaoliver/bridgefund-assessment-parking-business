@@ -1,29 +1,30 @@
+import { VehicleType } from "@/types/api";
 import { create } from "zustand";
 
-export type SectionType =
-  | "all"
-  | "residents"
-  | "non-residents-cars"
-  | "non-residents-motorcycles";
-export type Status = "all" | "available" | "occupied";
-export type VehicleType = "all" | "car" | "motorcycle";
 export type sortBy =
   | "parkingSpace"
   | "status"
   | "startTime"
   | "endTime"
   | "vehicleType";
+export type SectionType =
+  | "all"
+  | "residents"
+  | "non-residents-cars"
+  | "non-residents-motorcycles";
+export type Status = "all" | "available" | "occupied";
+export type StoreVehicleType = VehicleType | "all";
 
 interface FilterState {
   searchQuery: string;
   sectionType: SectionType;
   status: Status;
-  vehicleType: VehicleType;
+  vehicleType: StoreVehicleType;
   sortBy: sortBy;
   setSearchQuery: (query: string) => void;
   setSectionType: (sectionType: SectionType) => void;
   setStatus: (status: Status) => void;
-  setVehicleType: (vehicleType: VehicleType) => void;
+  setVehicleType: (vehicleType: StoreVehicleType) => void;
   setSortBy: (sortBy: sortBy) => void;
 }
 

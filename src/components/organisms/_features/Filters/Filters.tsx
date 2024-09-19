@@ -5,8 +5,9 @@ import useFilterStore, {
   SectionType,
   sortBy,
   Status,
-  VehicleType,
+  StoreVehicleType,
 } from "@/zustand/filters";
+import { VehicleType } from "@/types/api";
 
 const sectionTypeOptions = [
   { value: "all", label: "All" },
@@ -23,8 +24,8 @@ const statusOptions = [
 
 const vehicleOptions = [
   { value: "all", label: "All" },
-  { value: "car", label: "Car" },
-  { value: "motorcycle", label: "Motorcycle" },
+  { value: VehicleType.CAR, label: VehicleType.CAR },
+  { value: VehicleType.MOTOR, label: VehicleType.MOTOR },
 ];
 
 const sortOptions = [
@@ -61,7 +62,7 @@ export const Filters = () => {
   };
 
   const handleSelectVehicle = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setVehicleType(e.target.value as VehicleType);
+    setVehicleType(e.target.value as StoreVehicleType);
   };
 
   const handleSelectSortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
