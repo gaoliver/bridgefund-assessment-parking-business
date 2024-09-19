@@ -1,7 +1,9 @@
 .page {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* grid-template-rows: auto 1fr; */
+  height: 100vh;
+  width: 100%;
   background-color: var(--color-primary-light);
 }
 
@@ -9,6 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 .content {
@@ -20,7 +23,7 @@
   background-color: var(--color-white);
   box-shadow: var(--shadow-lg);
   width: 90%;
-  min-height: 80%;
+  flex: 1;
   margin-top: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }

@@ -126,47 +126,49 @@ export const ParkingList: React.FC<ParkingListProps> = ({
     <>
       <Filters />
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>{PageData.list.columns.parkingSpace}</th>
-            <th>{PageData.list.columns.sessionType}</th>
-            <th>{PageData.list.columns.status}</th>
-            <th>{PageData.list.columns.startTime}</th>
-            <th>{PageData.list.columns.endTime}</th>
-            <th>{PageData.list.columns.vehicleType}</th>
-            <th>{PageData.list.columns.licensePlate}</th>
-            <th>{PageData.list.columns.action.label}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listResultFiltered.map((item, index) => (
-            <tr key={index}>
-              <td>{item.parkingSpace}</td>
-              <td>{item.sessionType}</td>
-              <td
-                className={styles.status}
-                style={{
-                  color: getStatusColor(item.status),
-                }}
-              >
-                {item.status}
-              </td>
-              <td>{item.startTime ? formatDate(item.startTime) : null}</td>
-              <td>{item.endTime ? formatDate(item.endTime) : null}</td>
-              <td>{capitalize(item.vehicleType)}</td>
-              <td>{item.licensePlate}</td>
-              <td>
-                {item.status === Status.Occupied && (
-                  <Button color="danger">
-                    {PageData.list.columns.action.buttons.endParking}
-                  </Button>
-                )}
-              </td>
+      <div className={styles.table_container}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>{PageData.list.columns.parkingSpace}</th>
+              <th>{PageData.list.columns.sessionType}</th>
+              <th>{PageData.list.columns.status}</th>
+              <th>{PageData.list.columns.startTime}</th>
+              <th>{PageData.list.columns.endTime}</th>
+              <th>{PageData.list.columns.vehicleType}</th>
+              <th>{PageData.list.columns.licensePlate}</th>
+              <th>{PageData.list.columns.action.label}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {listResultFiltered.map((item, index) => (
+              <tr key={index}>
+                <td>{item.parkingSpace}</td>
+                <td>{item.sessionType}</td>
+                <td
+                  className={styles.status}
+                  style={{
+                    color: getStatusColor(item.status),
+                  }}
+                >
+                  {item.status}
+                </td>
+                <td>{item.startTime ? formatDate(item.startTime) : null}</td>
+                <td>{item.endTime ? formatDate(item.endTime) : null}</td>
+                <td>{capitalize(item.vehicleType)}</td>
+                <td>{item.licensePlate}</td>
+                <td>
+                  {item.status === Status.Occupied && (
+                    <Button color="danger">
+                      {PageData.list.columns.action.buttons.endParking}
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
