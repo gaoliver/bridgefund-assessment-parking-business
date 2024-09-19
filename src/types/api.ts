@@ -88,3 +88,16 @@ export type ParkingSessionsListResponse = {
   parkingSessions: ParkingSessionRowDto[];
   parkingSessionsTotalCount: number;
 };
+
+export type ApiResponse<T> = {
+  data: T;
+  request: {
+    body: object;
+    method: string;
+    params: object;
+    path: string;
+    query: object;
+    timestamp: string;
+  };
+  status: { code: number; message: string; success: boolean };
+};

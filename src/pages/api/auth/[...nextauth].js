@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
+const NEXTAUTH_URL = process.env.NEXT_PUBLIC_URL;
 
 export default NextAuth({
   providers: [

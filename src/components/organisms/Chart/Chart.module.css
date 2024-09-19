@@ -31,3 +31,7 @@
   text-align: right;
   font-weight: bold;
 }
+
+.is_occupied td:last-child {
+  color: var(--color-danger);
+}

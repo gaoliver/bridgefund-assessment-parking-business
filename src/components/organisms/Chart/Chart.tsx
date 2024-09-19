@@ -6,6 +6,7 @@ import { slugGenerator } from "@/utils/slugGenerator";
 interface ChartProps {
   title: string;
   description?: string;
+  isOccupied?: boolean;
   rows?: Array<{ label: string; value: string }>;
   style?: React.CSSProperties;
 }
@@ -13,6 +14,7 @@ interface ChartProps {
 export const Chart: React.FC<ChartProps> = ({
   title,
   description,
+  isOccupied = false,
   rows = [],
   style,
 }) => {
@@ -21,7 +23,9 @@ export const Chart: React.FC<ChartProps> = ({
       <h2 className={styles.title}>{title}</h2>
       <p className={styles.description}>{description}</p>
 
-      <table className={styles.table}>
+      <table
+        className={styles.table + (isOccupied ? ` ${styles.is_occupied}` : "")}
+      >
         <tbody>
           {rows.map((row) => (
             <tr key={slugGenerator(row.label)}>
