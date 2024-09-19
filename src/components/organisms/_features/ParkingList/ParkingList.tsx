@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import PageData from "@/data/dashboard.json";
 import styles from "./ParkingList.module.css";
@@ -15,6 +16,7 @@ import {
   handleSortBy,
 } from "./functions";
 import useAppState from "@/zustand/state";
+import { LIST_SEARCH_LIMIT } from "@/constants/parkingSessions";
 
 interface ParkingListProps {
   listResult: ParkingListResultProps[];
@@ -27,7 +29,7 @@ const getStatusColor = (status: Status) => {
 
 export const ParkingList: React.FC<ParkingListProps> = ({
   listResult = [],
-  fetchMore
+  fetchMore,
 }) => {
   const { isLoading } = useAppState();
   const { searchQuery, sessionType, sortBy, status, vehicleType } =
@@ -58,6 +60,12 @@ export const ParkingList: React.FC<ParkingListProps> = ({
       fetchMore?.();
     }
   };
+
+  React.useEffect(() => {
+    if (listResultFiltered.length < LIST_SEARCH_LIMIT && !isLoading) {
+      fetchMore?.();
+    }
+  }, [isLoading, listResultFiltered]);
 
   return (
     <>

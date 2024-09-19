@@ -3,7 +3,7 @@ import styles from "./Filters.module.css";
 import { Selector, TextInput } from "@/components/molecules";
 import useFilterStore from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
-import { FilterSessionType, FilterSortBy, FilterStatus, FilterVehicleType } from "@/types/parkingSessions";
+import { FilterSessionType, FilterSortBy, FilterStatus, FilterVehicleType, Status } from "@/types/parkingSessions";
 
 const sessionTypeOptions = [
   { value: "all", label: "All" },
@@ -14,8 +14,8 @@ const sessionTypeOptions = [
 
 const statusOptions = [
   { value: "all", label: "All" },
-  { value: "available", label: "Available" },
-  { value: "occupied", label: "Occupied" },
+  { value: Status.Available, label: "Available" },
+  { value: Status.Occupied, label: "Occupied" },
 ];
 
 const vehicleOptions = [

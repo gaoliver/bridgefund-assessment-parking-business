@@ -1,3 +1,4 @@
+import { LIST_SEARCH_LIMIT } from "@/constants/parkingSessions";
 import { ApiResponse, ParkingSessionsListResponse } from "@/types/api";
 import { ApiRoutes } from "@/types/routes";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -14,7 +15,7 @@ export default async function handler(
     const { offset } = query;
 
     const response = await fetch(
-      `${NEXT_PUBLIC_API_URL}${ApiRoutes.GetSessionsList}?offset=${offset}`,
+      `${NEXT_PUBLIC_API_URL}${ApiRoutes.GetSessionsList}?offset=${offset}&limit=${LIST_SEARCH_LIMIT}`,
       {
         method: "GET",
         headers: {
