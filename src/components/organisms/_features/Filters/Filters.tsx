@@ -2,14 +2,14 @@ import React from "react";
 import styles from "./Filters.module.css";
 import { Selector, TextInput } from "@/components/molecules";
 import useFilterStore, {
-  SectionType,
+  SessionType,
   sortBy,
   Status,
   StoreVehicleType,
 } from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
 
-const sectionTypeOptions = [
+const sessionTypeOptions = [
   { value: "all", label: "All" },
   { value: "residents", label: "Residents" },
   { value: "non-residents-cars", label: "Non-Residents Cars" },
@@ -39,12 +39,12 @@ const sortOptions = [
 export const Filters = () => {
   const {
     searchQuery,
-    sectionType,
+    sessionType,
     sortBy,
     status,
     vehicleType,
     setSearchQuery,
-    setSectionType,
+    setSessionType,
     setSortBy,
     setStatus,
     setVehicleType,
@@ -53,8 +53,8 @@ export const Filters = () => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSelectSectionType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSectionType(e.target.value as SectionType);
+  const handleSelectSessionType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSessionType(e.target.value as SessionType);
   };
 
   const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -83,11 +83,11 @@ export const Filters = () => {
       </div>
 
       <Selector
-        label="Section type"
-        name="sectionType"
-        options={sectionTypeOptions}
-        onChange={handleSelectSectionType}
-        value={sectionType}
+        label="Session type"
+        name="sessionType"
+        options={sessionTypeOptions}
+        onChange={handleSelectSessionType}
+        value={sessionType}
       />
       <Selector
         label="Status"

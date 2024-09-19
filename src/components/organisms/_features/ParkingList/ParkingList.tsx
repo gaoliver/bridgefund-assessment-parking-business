@@ -5,15 +5,15 @@ import { Button } from "@/components/atoms";
 import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
 import { Filters } from "../Filters";
-import useFilterStore, { SectionType, Status } from "@/zustand/filters";
+import useFilterStore, { SessionType, Status } from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
 
-type TableSectionType = Omit<SectionType, "all">;
+type TableSessionType = Omit<SessionType, "all">;
 type TableStatus = Omit<Status, "all">;
 
 type ParkingList = {
   parkingSpace: string;
-  sectionType: TableSectionType;
+  sessionType: TableSessionType;
   status: TableStatus;
   startTime: string;
   endTime: string;
@@ -24,7 +24,7 @@ type ParkingList = {
 const listResult: ParkingList = [
   {
     parkingSpace: "A1",
-    sectionType: "Residents",
+    sessionType: "Residents",
     status: "Occupied",
     startTime: "2023-10-01T08:00:00Z",
     endTime: "2023-10-01T10:00:00Z",
@@ -33,7 +33,7 @@ const listResult: ParkingList = [
   },
   {
     parkingSpace: "B2",
-    sectionType: "Non-residents",
+    sessionType: "Non-residents",
     status: "Available",
     startTime: "",
     endTime: "",
@@ -42,7 +42,7 @@ const listResult: ParkingList = [
   },
   {
     parkingSpace: "C3",
-    sectionType: "Non-residents",
+    sessionType: "Non-residents",
     status: "Occupied",
     startTime: "2023-10-01T09:00:00Z",
     endTime: "2023-10-01T11:00:00Z",
@@ -56,26 +56,26 @@ const getStatusColor = (status: TableStatus) => {
 };
 
 export const ParkingList = () => {
-  const { searchQuery, sectionType, sortBy, status, vehicleType } =
+  const { searchQuery, sessionType, sortBy, status, vehicleType } =
     useFilterStore();
 
-  const filterSectionType = (item: ParkingList[0]) => {
-    if (sectionType !== "all") {
-      if (sectionType === "residents" && item.sectionType !== "Residents") {
+  const filterSessionType = (item: ParkingList[0]) => {
+    if (sessionType !== "all") {
+      if (sessionType === "residents" && item.sessionType !== "Residents") {
         return false;
       }
 
       if (
-        sectionType === "non-residents-cars" &&
-        (item.sectionType !== "Non-residents" ||
+        sessionType === "non-residents-cars" &&
+        (item.sessionType !== "Non-residents" ||
           item.vehicleType !== VehicleType.CAR)
       ) {
         return false;
       }
 
       if (
-        sectionType === "non-residents-motorcycles" &&
-        (item.sectionType !== "Non-residents" ||
+        sessionType === "non-residents-motorcycles" &&
+        (item.sessionType !== "Non-residents" ||
           item.vehicleType !== VehicleType.MOTOR)
       ) {
         return false;
@@ -131,11 +131,11 @@ export const ParkingList = () => {
   const listResultFiltered =
     listResult
       .filter((item) => {
-        const isSectionType = filterSectionType(item);
+        const isSessionType = filterSessionType(item);
         const isStatus = filterStatus(item);
         const isVehicleType = filterVehicleType(item);
 
-        if (!isSectionType || !isStatus || !isVehicleType) {
+        if (!isSessionType || !isStatus || !isVehicleType) {
           return false;
         }
 
@@ -156,7 +156,7 @@ export const ParkingList = () => {
         <thead>
           <tr>
             <th>{PageData.list.columns.parkingSpace}</th>
-            <th>{PageData.list.columns.sectionType}</th>
+            <th>{PageData.list.columns.sessionType}</th>
             <th>{PageData.list.columns.status}</th>
             <th>{PageData.list.columns.startTime}</th>
             <th>{PageData.list.columns.endTime}</th>
@@ -169,7 +169,7 @@ export const ParkingList = () => {
           {listResultFiltered.map((item, index) => (
             <tr key={index}>
               <td>{item.parkingSpace}</td>
-              <td>{item.sectionType}</td>
+              <td>{item.sessionType}</td>
               <td
                 className={styles.status}
                 style={{

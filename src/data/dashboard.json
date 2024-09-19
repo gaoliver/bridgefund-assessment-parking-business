@@ -18,7 +18,7 @@
     "title": "Parking Spots",
     "columns": {
       "parkingSpace": "Parking space",
-      "sectionType": "Section type",
+      "sessionType": "Session type",
       "status": "Status",
       "startTime": "Start time",
       "endTime": "End time",

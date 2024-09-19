@@ -7,7 +7,7 @@ export type sortBy =
   | "startTime"
   | "endTime"
   | "vehicleType";
-export type SectionType =
+export type SessionType =
   | "all"
   | "residents"
   | "non-residents-cars"
@@ -17,12 +17,12 @@ export type StoreVehicleType = VehicleType | "all";
 
 interface FilterState {
   searchQuery: string;
-  sectionType: SectionType;
+  sessionType: SessionType;
   status: Status;
   vehicleType: StoreVehicleType;
   sortBy: sortBy;
   setSearchQuery: (query: string) => void;
-  setSectionType: (sectionType: SectionType) => void;
+  setSessionType: (sessionType: SessionType) => void;
   setStatus: (status: Status) => void;
   setVehicleType: (vehicleType: StoreVehicleType) => void;
   setSortBy: (sortBy: sortBy) => void;
@@ -30,12 +30,12 @@ interface FilterState {
 
 const useFilterStore = create<FilterState>((set) => ({
   searchQuery: "",
-  sectionType: "all",
+  sessionType: "all",
   status: "all",
   vehicleType: "all",
   sortBy: "parkingSpace",
   setSearchQuery: (query) => set({ searchQuery: query }),
-  setSectionType: (sectionType) => set({ sectionType }),
+  setSessionType: (sessionType) => set({ sessionType }),
   setStatus: (status) => set({ status }),
   setVehicleType: (vehicleType) => set({ vehicleType }),
   setSortBy: (sortBy) => set({ sortBy }),
