@@ -10,4 +10,5 @@ export enum ApiRoutes {
 export enum InternalRoutes {
   Login = "/api/auth",
   SessionsList = "/api/sessions/list",
+  SessionsEnd = "/api/sessions/end",
 }

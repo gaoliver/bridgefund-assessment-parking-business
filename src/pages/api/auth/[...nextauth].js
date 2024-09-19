@@ -47,7 +47,7 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 60,
+    maxAge: 10 * 60,
   },
   secret: NEXTAUTH_SECRET,
   callbacks: {

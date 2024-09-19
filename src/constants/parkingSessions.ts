@@ -1,1 +1,1 @@
-export const LIST_SEARCH_LIMIT = 100;
+export const LIST_SEARCH_LIMIT = 20;

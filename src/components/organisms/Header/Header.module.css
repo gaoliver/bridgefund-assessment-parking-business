@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.2rem 2rem;
   background-color: var(--color-primary);
   color: var(--color-white);
   box-shadow: var(--shadow-lg);

@@ -1,5 +1,5 @@
 import { Header } from "@/components/organisms";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/dashboard.module.css";
 import { Overview } from "@/components/organisms/_features/Overview/Overview";
 import { ParkingList } from "@/components/organisms/_features/ParkingList";
@@ -28,6 +28,7 @@ export const Page: NextPage<PageProps> = ({
   const { isLoading, setIsLoading } = useAppState();
   const { activeContent } = useDashboardStore();
 
+  const [sessionListLimit, setSessionListLimit] = useState(LIST_SEARCH_LIMIT);
   const [hasLimitReached, setHasLimitReached] = useState(false);
   const [parkingSessionsList, setParkingSessionsList] = useState<
     ParkingSessionRowDto[] | undefined
@@ -46,7 +47,10 @@ export const Page: NextPage<PageProps> = ({
   const handleFetchMore = async () => {
     if (isLoading || hasLimitReached) return;
 
-    const searchOffset = (parkingSessions || []).length + 1;
+    const searchOffset = Math.min(
+      (parkingSessionsList || []).length + 1,
+      sessionListLimit
+    );
 
     setIsLoading(true);
 
@@ -81,19 +85,11 @@ export const Page: NextPage<PageProps> = ({
     }
   };
 
-  const filteredParkingSessions =
-    useMemo(() => {
-      return parkingSessionsList?.filter(
-        (item, index, self) =>
-          index ===
-          self.findIndex(
-            (obj) => obj.parkingSessionId === item.parkingSessionId
-          )
-      );
-    }, [parkingSessionsList]) || [];
-
   useEffect(() => {
-    setParkingSessionsList(parkingSessions);
+    setParkingSessionsList(parkingSessions?.parkingSessions);
+    setSessionListLimit(
+      parkingSessions?.parkingSessionsTotalCount || LIST_SEARCH_LIMIT
+    );
   }, [parkingSessions]);
 
   return (
@@ -111,7 +107,7 @@ export const Page: NextPage<PageProps> = ({
           )}
           {activeContent === "list" && (
             <ParkingList
-              listResult={mapParkingList(filteredParkingSessions)}
+              listResult={mapParkingList(parkingSessionsList || [])}
               fetchMore={handleFetchMore}
             />
           )}
@@ -163,7 +159,7 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
     const data: ApiResponse<ParkingSessionsListResponse> =
       await response.json();
 
-    return data.data.parkingSessions;
+    return data.data;
   }
 
   try {
