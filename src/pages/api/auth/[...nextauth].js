@@ -1,3 +1,4 @@
+import { InternalRoutes } from "@/types/routes";
 import { decrypt } from "@/utils/decrypt";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -18,7 +19,7 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const response = await fetch(`${NEXTAUTH_URL}/api/auth`, {
+        const response = await fetch(`${NEXTAUTH_URL}${InternalRoutes.Login}`, {
           body: JSON.stringify({
             email: credentials.email,
             password: decrypt(credentials.password),
@@ -43,6 +44,7 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
+    maxAge: 2 * 60 * 60,
   },
   secret: NEXTAUTH_SECRET,
 });

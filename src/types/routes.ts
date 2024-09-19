@@ -6,3 +6,7 @@ export enum ApiRoutes {
   PostStartSession = "/v1/parking/session/start",
   PostEndSession = "/v1/parking/session/end",
 }
+
+export enum InternalRoutes {
+  Login = "/api/auth",
+}
