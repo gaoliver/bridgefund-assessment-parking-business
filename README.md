@@ -27,7 +27,7 @@ cd parking-business
 3. Create a .env.local file, following the example of .env.example.
 
 ```
-NEXT_PUBLIC_BASE_API=ADD_THE_BASE_API_URL
+NEXT_PUBLIC_API_URL=ADD_THE_BASE_API_URL
 ```
 
 4. Install the required dependencies:
