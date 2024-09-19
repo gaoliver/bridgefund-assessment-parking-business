@@ -1,22 +1,24 @@
 import React from "react";
 import PageData from "@/data/dashboard.json";
 import styles from "./ParkingList.module.css";
-import { Button } from "@/components/atoms";
+import { Button, Loader } from "@/components/atoms";
 import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
 import { Filters } from "../Filters";
 import useFilterStore from "@/zustand/filters";
-import { VehicleType } from "@/types/api";
-import {
-  SessionType,
-  Status,
-  TableSessionType,
-  ParkingListResultProps,
-} from "@/types/parkingSessions";
+import { Status, ParkingListResultProps } from "@/types/parkingSessions";
 import { capitalize } from "@/utils/capitalize";
+import {
+  filterSessionType,
+  filterStatus,
+  filterVehicleType,
+  handleSortBy,
+} from "./functions";
+import useAppState from "@/zustand/state";
 
 interface ParkingListProps {
   listResult: ParkingListResultProps[];
+  fetchMore?: () => void;
 }
 
 const getStatusColor = (status: Status) => {
@@ -25,91 +27,18 @@ const getStatusColor = (status: Status) => {
 
 export const ParkingList: React.FC<ParkingListProps> = ({
   listResult = [],
+  fetchMore
 }) => {
+  const { isLoading } = useAppState();
   const { searchQuery, sessionType, sortBy, status, vehicleType } =
     useFilterStore();
-
-  const filterSessionType = (item: ParkingListResultProps) => {
-    if (sessionType !== "all") {
-      if (
-        sessionType === SessionType.Residents &&
-        item.sessionType !== TableSessionType.Resident
-      ) {
-        return false;
-      }
-
-      if (
-        sessionType === SessionType.NonResidentsCars &&
-        (item.sessionType !== TableSessionType.NonResident ||
-          item.vehicleType !== VehicleType.CAR)
-      ) {
-        return false;
-      }
-
-      if (
-        sessionType === SessionType.NonResidentsMotorcycles &&
-        (item.sessionType !== TableSessionType.NonResident ||
-          item.vehicleType !== VehicleType.MOTOR)
-      ) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  const filterStatus = (item: ParkingListResultProps) => {
-    if (status !== "all") {
-      if (status === Status.Available && item.status !== "Available") {
-        return false;
-      }
-
-      if (status === Status.Occupied && item.status !== "Occupied") {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  const filterVehicleType = (item: ParkingListResultProps) => {
-    if (vehicleType !== "all" && item.vehicleType !== vehicleType) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSortBy = (
-    a: ParkingListResultProps,
-    b: ParkingListResultProps
-  ) => {
-    if (sortBy === "parkingSpace") {
-      return a.parkingSpace.localeCompare(b.parkingSpace);
-    }
-    if (sortBy === "status") {
-      return a.status.toLowerCase().localeCompare(b.status.toLowerCase());
-    }
-    if (sortBy === "startTime") {
-      return a.startTime.localeCompare(b.startTime);
-    }
-    if (sortBy === "endTime") {
-      return a.endTime.localeCompare(b.endTime);
-    }
-    if (sortBy === "vehicleType") {
-      return (a.vehicleType.toString() || "").localeCompare(
-        b.vehicleType.toString() || ""
-      );
-    }
-    return 0;
-  };
 
   const listResultFiltered =
     listResult
       .filter((item) => {
-        const isSessionType = filterSessionType(item);
-        const isStatus = filterStatus(item);
-        const isVehicleType = filterVehicleType(item);
+        const isSessionType = filterSessionType(item, sessionType);
+        const isStatus = filterStatus(item, status);
+        const isVehicleType = filterVehicleType(item, vehicleType);
 
         if (!isSessionType || !isStatus || !isVehicleType) {
           return false;
@@ -120,13 +49,21 @@ export const ParkingList: React.FC<ParkingListProps> = ({
       .filter((item) =>
         item.licensePlate.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      .sort(handleSortBy) || [];
+      .sort((a, b) => handleSortBy(a, b, sortBy)) || [];
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+
+    if (Math.round(scrollTop) + clientHeight >= scrollHeight && !isLoading) {
+      fetchMore?.();
+    }
+  };
 
   return (
     <>
       <Filters />
 
-      <div className={styles.table_container}>
+      <div className={styles.table_container} onScroll={handleScroll}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -168,6 +105,7 @@ export const ParkingList: React.FC<ParkingListProps> = ({
             ))}
           </tbody>
         </table>
+        {isLoading && <Loader />}
       </div>
     </>
   );

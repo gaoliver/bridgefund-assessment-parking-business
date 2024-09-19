@@ -1,24 +1,35 @@
 import { Header } from "@/components/organisms";
-import React from "react";
+import React, { useState } from "react";
 import styles from "@/styles/dashboard.module.css";
 import { Overview } from "@/components/organisms/_features/Overview/Overview";
 import { ParkingList } from "@/components/organisms/_features/ParkingList";
 import useDashboardStore from "@/zustand/dashboard";
 import { InferGetServerSidePropsType, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import { ApiRoutes } from "@/types/routes";
+import { ApiRoutes, InternalRoutes } from "@/types/routes";
 import {
   ApiResponse,
+  ParkingSessionRowDto,
   ParkingSessionsListResponse,
   ParkingSpaceListResponse,
 } from "@/types/api";
 import { mapChart } from "@/utils/mapChart";
 import { mapParkingList } from "@/utils/mapParkingList";
+import useAppState from "@/zustand/state";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-export const Page: NextPage<PageProps> = ({ parkingSpaces, parkingSessions }) => {
+export const Page: NextPage<PageProps> = ({
+  parkingSpaces,
+  parkingSessions,
+  session,
+}) => {
+  const { isLoading, setIsLoading } = useAppState();
   const { activeContent } = useDashboardStore();
+
+  const [parkingSessionsList, setParkingSessionsList] = useState<
+    ParkingSessionRowDto[] | undefined
+  >();
 
   const residentSpaces = parkingSpaces?.find(
     (space) => space.parkingSpaceId === 1
@@ -29,6 +40,46 @@ export const Page: NextPage<PageProps> = ({ parkingSpaces, parkingSessions }) =>
   const nonResidentMotorcycleSpaces = parkingSpaces?.find(
     (space) => space.parkingSpaceId === 3
   );
+
+  const handleFetchMore = async () => {
+    if (isLoading) return;
+
+    const searchOffset = (parkingSessions || []).length + 1;
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        `${InternalRoutes.SessionsList}?offset=${searchOffset}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.accessToken}`,
+          },
+        }
+      );
+
+      const data: ParkingSessionsListResponse = await response.json();
+
+      const filteredList = data.parkingSessions.filter(
+        (item, index, self) =>
+          index ===
+          self.findIndex(
+            (obj) => obj.parkingSessionId === item.parkingSessionId
+          )
+      );
+
+      setParkingSessionsList((prev) => [...(prev || []), ...filteredList]);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    setParkingSessionsList(parkingSessions);
+  }, [parkingSessions]);
 
   return (
     <div className={styles.page}>
@@ -43,7 +94,12 @@ export const Page: NextPage<PageProps> = ({ parkingSpaces, parkingSessions }) =>
               nonResidentsMotorcyles={mapChart(nonResidentMotorcycleSpaces)}
             />
           )}
-          {activeContent === "list" && <ParkingList listResult={mapParkingList(parkingSessions || [])} />}
+          {activeContent === "list" && (
+            <ParkingList
+              listResult={mapParkingList(parkingSessionsList || [])}
+              fetchMore={handleFetchMore}
+            />
+          )}
         </div>
       </main>
     </div>
@@ -104,6 +160,7 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
       props: {
         parkingSpaces,
         parkingSessions,
+        session,
       },
     };
   } catch (error) {
