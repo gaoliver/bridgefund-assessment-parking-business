@@ -1,7 +1,7 @@
 .page {
   display: grid;
   grid-template-rows: auto 1fr;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--color-primary-light);
 }
 
@@ -22,4 +22,5 @@
   width: 90%;
   min-height: 80%;
   margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
