@@ -27,7 +27,10 @@ cd parking-business
 3. Create a .env.local file, following the example of .env.example.
 
 ```
-NEXT_PUBLIC_API_URL=ADD_THE_BASE_API_URL
+NEXT_PUBLIC_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=
+NEXTAUTH_SECRET=
+NEXT_PUBLIC_ENCRYPTION_KEY=
 ```
 
 4. Install the required dependencies:
