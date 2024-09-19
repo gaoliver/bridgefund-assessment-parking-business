@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 import * as yup from "yup";
 import { InferGetServerSidePropsType, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -17,7 +18,9 @@ const schema = yup.object().shape({
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Page: NextPage<PageProps> = () => {
-  const { handleChange, values, handleSubmit, errors } =
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const { handleChange, values, handleSubmit } =
     useFormik<LoginWithPasswordDto>({
       initialValues: {
         email: "",
@@ -30,16 +33,26 @@ const Page: NextPage<PageProps> = () => {
           email: values.email,
           password: encrypt(values.password),
           callbackUrl: "/dashboard",
+        }).catch((error) => {
+          setErrorMessage(error.message);
         });
       },
     });
 
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get("error");
+      if (error) {
+        setErrorMessage(error);
+      }
+    }, []);
+
   return (
     <main className={styles.main}>
-      <Card>
+      <Card style={{ maxWidth: "400px", minWidth: "200px" }}>
         <h1>Login</h1>
 
-        <div className={styles.fields}>
+        <div className={styles.fields} role="form">
           <TextInput
             label="Email"
             name="email"
@@ -57,7 +70,8 @@ const Page: NextPage<PageProps> = () => {
           />
         </div>
 
-        <Button variant="primary" type="submit" onClick={() => handleSubmit()}>
+        {errorMessage && <span className={styles.error}>{errorMessage}</span>}
+        <Button variant="primary" onClick={() => handleSubmit()}>
           Login
         </Button>
       </Card>

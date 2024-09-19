@@ -20,7 +20,7 @@ export const mapChart = (data: ParkingSpaceRowDto | undefined): ChartProps => {
       },
       {
         label: "percentage",
-        value: `${((capacity - available) / capacity) * 100}%`,
+        value: `${(((capacity - available) / capacity) * 100).toFixed(2)}%`,
       },
     ],
   };

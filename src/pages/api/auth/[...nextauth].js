@@ -19,25 +19,35 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const response = await fetch(`${NEXTAUTH_URL}${InternalRoutes.Login}`, {
-          body: JSON.stringify({
-            email: credentials.email,
-            password: decrypt(credentials.password),
-          }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        try {
+          const response = await fetch(
+            `${NEXTAUTH_URL}${InternalRoutes.Login}`,
+            {
+              body: JSON.stringify({
+                email: credentials.email,
+                password: decrypt(credentials.password),
+              }),
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
 
-        if (response.ok) {
+          if (!response.ok) {
+            const error = new Error("Invalid credentials");
+            error.name = "InvalidCredentialsError";
+            throw error;
+          }
+
           const data = await response.json();
           return {
             id: data.user.id,
             email: data.user.email,
             accessToken: data.auth.accessToken,
           };
+        } catch (error) {
+          console.error(error);
+          throw error;
         }
-
-        return null;
       },
     }),
   ],
