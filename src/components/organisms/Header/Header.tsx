@@ -3,6 +3,7 @@ import styles from "./Header.module.css";
 import SiteData from "@/data/site.json";
 import { Button } from "@/components/atoms";
 import useDashboardStore from "@/zustand/dashboard";
+import { signOut } from "next-auth/react";
 
 export const Header = () => {
   const { setActiveContent } = useDashboardStore();
@@ -28,7 +29,9 @@ export const Header = () => {
         </Button>
       </menu>
 
-      <Button variant="secondary">Logout</Button>
+      <Button variant="secondary" onClick={() => signOut()}>
+        Logout
+      </Button>
     </header>
   );
 };
