@@ -7,12 +7,17 @@ import useDashboardStore from "@/zustand/dashboard";
 import { InferGetServerSidePropsType, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 import { ApiRoutes } from "@/types/routes";
-import { ApiResponse, ParkingSpaceListResponse } from "@/types/api";
+import {
+  ApiResponse,
+  ParkingSessionsListResponse,
+  ParkingSpaceListResponse,
+} from "@/types/api";
 import { mapChart } from "@/utils/mapChart";
+import { mapParkingList } from "@/utils/mapParkingList";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-export const Page: NextPage<PageProps> = ({ parkingSpaces }) => {
+export const Page: NextPage<PageProps> = ({ parkingSpaces, parkingSessions }) => {
   const { activeContent } = useDashboardStore();
 
   const residentSpaces = parkingSpaces?.find(
@@ -38,7 +43,7 @@ export const Page: NextPage<PageProps> = ({ parkingSpaces }) => {
               nonResidentsMotorcyles={mapChart(nonResidentMotorcycleSpaces)}
             />
           )}
-          {activeContent === "list" && <ParkingList />}
+          {activeContent === "list" && <ParkingList listResult={mapParkingList(parkingSessions || [])} />}
         </div>
       </main>
     </div>
@@ -59,21 +64,46 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
     };
   }
 
-  try {
+  async function getParkingSpaces() {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${ApiRoutes.GetSpacesList}`,
       {
         headers: {
-          Authorization: `Bearer ${session.user?.accessToken}`,
+          Authorization: `Bearer ${session?.user?.accessToken}`,
         },
       }
     );
 
     const data: ApiResponse<ParkingSpaceListResponse> = await response.json();
 
+    return data.data.parkingSpaces;
+  }
+
+  async function getParkingSessions() {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${ApiRoutes.GetSessionsList}`,
+      {
+        headers: {
+          Authorization: `Bearer ${session?.user?.accessToken}`,
+        },
+      }
+    );
+
+    const data: ApiResponse<ParkingSessionsListResponse> =
+      await response.json();
+
+    return data.data.parkingSessions;
+  }
+
+  try {
+    const [parkingSpaces, parkingSessions] = await Promise.all([
+      getParkingSpaces(),
+      getParkingSessions(),
+    ]);
     return {
       props: {
-        parkingSpaces: data.data.parkingSpaces,
+        parkingSpaces,
+        parkingSessions,
       },
     };
   } catch (error) {

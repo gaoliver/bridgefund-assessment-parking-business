@@ -5,77 +5,50 @@ import { Button } from "@/components/atoms";
 import { colors } from "@/constants/colors";
 import { formatDate } from "@/utils/formatDate";
 import { Filters } from "../Filters";
-import useFilterStore, { SessionType, Status } from "@/zustand/filters";
+import useFilterStore from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
+import {
+  SessionType,
+  Status,
+  TableSessionType,
+  ParkingListResultProps,
+} from "@/types/parkingSessions";
+import { capitalize } from "@/utils/capitalize";
 
-type TableSessionType = Omit<SessionType, "all">;
-type TableStatus = Omit<Status, "all">;
+interface ParkingListProps {
+  listResult: ParkingListResultProps[];
+}
 
-type ParkingList = {
-  parkingSpace: string;
-  sessionType: TableSessionType;
-  status: TableStatus;
-  startTime: string;
-  endTime: string;
-  vehicleType: VehicleType;
-  licensePlate: string;
-}[];
-
-const listResult: ParkingList = [
-  {
-    parkingSpace: "A1",
-    sessionType: "Residents",
-    status: "Occupied",
-    startTime: "2023-10-01T08:00:00Z",
-    endTime: "2023-10-01T10:00:00Z",
-    vehicleType: VehicleType.CAR,
-    licensePlate: "ABC123",
-  },
-  {
-    parkingSpace: "B2",
-    sessionType: "Non-residents",
-    status: "Available",
-    startTime: "",
-    endTime: "",
-    vehicleType: VehicleType.CAR,
-    licensePlate: "",
-  },
-  {
-    parkingSpace: "C3",
-    sessionType: "Non-residents",
-    status: "Occupied",
-    startTime: "2023-10-01T09:00:00Z",
-    endTime: "2023-10-01T11:00:00Z",
-    vehicleType: VehicleType.MOTOR,
-    licensePlate: "XYZ789",
-  },
-];
-
-const getStatusColor = (status: TableStatus) => {
+const getStatusColor = (status: Status) => {
   return status === "Available" ? colors.green : colors.red;
 };
 
-export const ParkingList = () => {
+export const ParkingList: React.FC<ParkingListProps> = ({
+  listResult = [],
+}) => {
   const { searchQuery, sessionType, sortBy, status, vehicleType } =
     useFilterStore();
 
-  const filterSessionType = (item: ParkingList[0]) => {
+  const filterSessionType = (item: ParkingListResultProps) => {
     if (sessionType !== "all") {
-      if (sessionType === "residents" && item.sessionType !== "Residents") {
+      if (
+        sessionType === SessionType.Residents &&
+        item.sessionType !== TableSessionType.Resident
+      ) {
         return false;
       }
 
       if (
-        sessionType === "non-residents-cars" &&
-        (item.sessionType !== "Non-residents" ||
+        sessionType === SessionType.NonResidentsCars &&
+        (item.sessionType !== TableSessionType.NonResident ||
           item.vehicleType !== VehicleType.CAR)
       ) {
         return false;
       }
 
       if (
-        sessionType === "non-residents-motorcycles" &&
-        (item.sessionType !== "Non-residents" ||
+        sessionType === SessionType.NonResidentsMotorcycles &&
+        (item.sessionType !== TableSessionType.NonResident ||
           item.vehicleType !== VehicleType.MOTOR)
       ) {
         return false;
@@ -85,13 +58,13 @@ export const ParkingList = () => {
     return true;
   };
 
-  const filterStatus = (item: ParkingList[0]) => {
+  const filterStatus = (item: ParkingListResultProps) => {
     if (status !== "all") {
-      if (status === "available" && item.status !== "Available") {
+      if (status === Status.Available && item.status !== "Available") {
         return false;
       }
 
-      if (status === "occupied" && item.status !== "Occupied") {
+      if (status === Status.Occupied && item.status !== "Occupied") {
         return false;
       }
     }
@@ -99,7 +72,7 @@ export const ParkingList = () => {
     return true;
   };
 
-  const filterVehicleType = (item: ParkingList[0]) => {
+  const filterVehicleType = (item: ParkingListResultProps) => {
     if (vehicleType !== "all" && item.vehicleType !== vehicleType) {
       return false;
     }
@@ -107,7 +80,10 @@ export const ParkingList = () => {
     return true;
   };
 
-  const handleSortBy = (a: ParkingList[0], b: ParkingList[0]) => {
+  const handleSortBy = (
+    a: ParkingListResultProps,
+    b: ParkingListResultProps
+  ) => {
     if (sortBy === "parkingSpace") {
       return a.parkingSpace.localeCompare(b.parkingSpace);
     }
@@ -141,10 +117,8 @@ export const ParkingList = () => {
 
         return true;
       })
-      .filter(
-        (item) =>
-          item.licensePlate.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.parkingSpace.toLowerCase().includes(searchQuery.toLowerCase())
+      .filter((item) =>
+        item.licensePlate.toLowerCase().includes(searchQuery.toLowerCase())
       )
       .sort(handleSortBy) || [];
 
@@ -180,10 +154,10 @@ export const ParkingList = () => {
               </td>
               <td>{item.startTime ? formatDate(item.startTime) : null}</td>
               <td>{item.endTime ? formatDate(item.endTime) : null}</td>
-              <td>{item.vehicleType}</td>
+              <td>{capitalize(item.vehicleType)}</td>
               <td>{item.licensePlate}</td>
               <td>
-                {item.status === "Occupied" && (
+                {item.status === Status.Occupied && (
                   <Button color="danger">
                     {PageData.list.columns.action.buttons.endParking}
                   </Button>

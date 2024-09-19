@@ -1,13 +1,9 @@
 import React from "react";
 import styles from "./Filters.module.css";
 import { Selector, TextInput } from "@/components/molecules";
-import useFilterStore, {
-  SessionType,
-  sortBy,
-  Status,
-  StoreVehicleType,
-} from "@/zustand/filters";
+import useFilterStore from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
+import { FilterSessionType, FilterSortBy, FilterStatus, FilterVehicleType } from "@/types/parkingSessions";
 
 const sessionTypeOptions = [
   { value: "all", label: "All" },
@@ -24,8 +20,8 @@ const statusOptions = [
 
 const vehicleOptions = [
   { value: "all", label: "All" },
-  { value: VehicleType.CAR, label: VehicleType.CAR },
-  { value: VehicleType.MOTOR, label: VehicleType.MOTOR },
+  { value: VehicleType.CAR, label: "Car" },
+  { value: VehicleType.MOTOR, label: "Motorcycle" },
 ];
 
 const sortOptions = [
@@ -54,19 +50,19 @@ export const Filters = () => {
   };
 
   const handleSelectSessionType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSessionType(e.target.value as SessionType);
+    setSessionType(e.target.value as FilterSessionType);
   };
 
   const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(e.target.value as Status);
+    setStatus(e.target.value as FilterStatus);
   };
 
   const handleSelectVehicle = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setVehicleType(e.target.value as StoreVehicleType);
+    setVehicleType(e.target.value as FilterVehicleType);
   };
 
   const handleSelectSortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value as sortBy);
+    setSortBy(e.target.value as FilterSortBy);
   };
 
   return (
@@ -75,7 +71,7 @@ export const Filters = () => {
         <TextInput
           label="Search"
           name="search"
-          placeholder="License plate/Parking space"
+          placeholder="License plate"
           onChange={handleChangeQuery}
           value={searchQuery}
           autoComplete="off"

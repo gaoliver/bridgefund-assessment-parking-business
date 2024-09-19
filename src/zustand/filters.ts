@@ -1,31 +1,22 @@
-import { VehicleType } from "@/types/api";
+import {
+  FilterSessionType,
+  FilterSortBy,
+  FilterStatus,
+  FilterVehicleType,
+} from "@/types/parkingSessions";
 import { create } from "zustand";
-
-export type sortBy =
-  | "parkingSpace"
-  | "status"
-  | "startTime"
-  | "endTime"
-  | "vehicleType";
-export type SessionType =
-  | "all"
-  | "residents"
-  | "non-residents-cars"
-  | "non-residents-motorcycles";
-export type Status = "all" | "available" | "occupied";
-export type StoreVehicleType = VehicleType | "all";
 
 interface FilterState {
   searchQuery: string;
-  sessionType: SessionType;
-  status: Status;
-  vehicleType: StoreVehicleType;
-  sortBy: sortBy;
+  sessionType: FilterSessionType;
+  status: FilterStatus;
+  vehicleType: FilterVehicleType;
+  sortBy: FilterSortBy;
   setSearchQuery: (query: string) => void;
-  setSessionType: (sessionType: SessionType) => void;
-  setStatus: (status: Status) => void;
-  setVehicleType: (vehicleType: StoreVehicleType) => void;
-  setSortBy: (sortBy: sortBy) => void;
+  setSessionType: (sessionType: FilterSessionType) => void;
+  setStatus: (status: FilterStatus) => void;
+  setVehicleType: (vehicleType: FilterVehicleType) => void;
+  setSortBy: (sortBy: FilterSortBy) => void;
 }
 
 const useFilterStore = create<FilterState>((set) => ({
