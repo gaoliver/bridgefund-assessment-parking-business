@@ -6,7 +6,7 @@ import { encrypt } from "@/utils/encrypt";
 import { useFormik } from "formik";
 import { signIn } from "next-auth/react";
 import * as yup from "yup";
-import { GetServerSideProps } from "next";
+import { InferGetServerSidePropsType, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 
 const schema = yup.object().shape({
@@ -14,7 +14,9 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-export default function Login() {
+type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const Page: NextPage<PageProps> = () => {
   const { handleChange, values, handleSubmit, errors } =
     useFormik<LoginWithPasswordDto>({
       initialValues: {
@@ -61,10 +63,10 @@ export default function Login() {
       </Card>
     </main>
   );
-}
+};
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+export const getServerSideProps = async ({ req }: NextPageContext) => {
+  const session = await getSession({ req });
 
   if (session) {
     return {
@@ -79,3 +81,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {},
   };
 };
+
+export default Page;

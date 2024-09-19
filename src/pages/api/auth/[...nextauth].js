@@ -29,9 +29,12 @@ export default NextAuth({
         });
 
         if (response.ok) {
-          const user = await response.json();
-          console.log({ user });
-          return { id: user.id, email: user.email };
+          const data = await response.json();
+          return {
+            id: data.user.id,
+            email: data.user.email,
+            accessToken: data.auth.accessToken,
+          };
         }
 
         return null;
@@ -47,4 +50,22 @@ export default NextAuth({
     maxAge: 3600,
   },
   secret: NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.accessToken = user.accessToken;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.accessToken = token.accessToken;
+      }
+      return session;
+    },
+  },
 });

@@ -1,4 +1,4 @@
-import { UserDto } from "@/types/api";
+import { UserResponse } from "@/types/api";
 import { ApiRoutes } from "@/types/routes";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -6,7 +6,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<UserDto>
+  res: NextApiResponse<UserResponse>
 ) {
   const { method, body } = req;
 
@@ -32,7 +32,8 @@ export default async function handler(
           throw new Error("Failed to login");
         }
 
-        const data = await response.json();
+        const { data }: { data: UserResponse } = await response.json();
+
         res.status(200).json(data);
       } catch (error) {
         console.error(error);
