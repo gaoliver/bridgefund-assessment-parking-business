@@ -63,3 +63,9 @@
 .status {
   font-weight: bold;
 }
+
+@media screen and (max-width: 640px) {
+  .table_container {
+    height: 650px;
+  }
+}

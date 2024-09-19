@@ -3,7 +3,13 @@ import styles from "./Filters.module.css";
 import { Selector, TextInput } from "@/components/molecules";
 import useFilterStore from "@/zustand/filters";
 import { VehicleType } from "@/types/api";
-import { FilterSessionType, FilterSortBy, FilterStatus, FilterVehicleType, Status } from "@/types/parkingSessions";
+import {
+  FilterSessionType,
+  FilterSortBy,
+  FilterStatus,
+  FilterVehicleType,
+  Status,
+} from "@/types/parkingSessions";
 
 const sessionTypeOptions = [
   { value: "all", label: "All" },
@@ -65,8 +71,8 @@ export const Filters = () => {
     setSortBy(e.target.value as FilterSortBy);
   };
 
-  return (
-    <div className={styles.filters}>
+  const RenderFilters = () => (
+    <>
       <div style={{ flex: 0.5 }}>
         <TextInput
           label="Search"
@@ -106,6 +112,19 @@ export const Filters = () => {
         onChange={handleSelectSortBy}
         value={sortBy}
       />
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      <div className={styles.filters}>
+        <RenderFilters />
+      </div>
+
+      <details className={styles.filters_mobile}>
+        <summary>Filters</summary>
+        <RenderFilters />
+      </details>
+    </>
   );
 };
