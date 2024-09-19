@@ -12,7 +12,7 @@ export default async function handler(
   const { query, headers } = req;
 
   try {
-    const { offset } = query;
+    const { offset = 0 } = query;
 
     const response = await fetch(
       `${NEXT_PUBLIC_API_URL}${ApiRoutes.GetSessionsList}?offset=${offset}&limit=${LIST_SEARCH_LIMIT}`,

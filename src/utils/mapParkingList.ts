@@ -23,6 +23,7 @@ export const mapParkingList = (
   };
 
   return list.map((item) => ({
+    parkingSessionId: item.parkingSessionId.toString(),
     parkingSpace: item.parkingSpaceId.toString(),
     sessionType: sessionType(item.parkingSpaceId),
     status: sessionStatus(item.isSessionEnded),

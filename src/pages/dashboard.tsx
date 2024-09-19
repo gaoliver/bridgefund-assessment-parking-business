@@ -1,38 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Header } from "@/components/organisms";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "@/styles/dashboard.module.css";
 import { Overview } from "@/components/organisms/_features/Overview/Overview";
 import { ParkingList } from "@/components/organisms/_features/ParkingList";
 import useDashboardStore from "@/zustand/dashboard";
 import { InferGetServerSidePropsType, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import { ApiRoutes, InternalRoutes } from "@/types/routes";
-import {
-  ApiResponse,
-  ParkingSessionRowDto,
-  ParkingSessionsListResponse,
-  ParkingSpaceListResponse,
-} from "@/types/api";
+import { ApiRoutes } from "@/types/routes";
+import { ApiResponse, ParkingSpaceListResponse } from "@/types/api";
 import { mapChart } from "@/utils/mapChart";
 import { mapParkingList } from "@/utils/mapParkingList";
 import useAppState from "@/zustand/state";
-import { LIST_SEARCH_LIMIT } from "@/constants/parkingSessions";
+import { useSessionListIncrement } from "@/tanstack/mutations";
+import { useSessionListQuery } from "@/tanstack/queries";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-export const Page: NextPage<PageProps> = ({
-  parkingSpaces,
-  parkingSessions,
-  session,
-}) => {
-  const { isLoading, setIsLoading } = useAppState();
+export const Page: NextPage<PageProps> = ({ parkingSpaces, session }) => {
+  const { data: parkingSessionsList, isLoading } = useSessionListQuery();
+  const { mutateAsync, isPending: isFetchingMore } = useSessionListIncrement();
   const { activeContent } = useDashboardStore();
-
-  const [sessionListLimit, setSessionListLimit] = useState(LIST_SEARCH_LIMIT);
-  const [hasLimitReached, setHasLimitReached] = useState(false);
-  const [parkingSessionsList, setParkingSessionsList] = useState<
-    ParkingSessionRowDto[] | undefined
-  >();
+  const { setAcessToken, hasReachedLimit } = useAppState();
 
   const residentSpaces = parkingSpaces?.find(
     (space) => space.parkingSpaceId === 1
@@ -45,52 +34,16 @@ export const Page: NextPage<PageProps> = ({
   );
 
   const handleFetchMore = async () => {
-    if (isLoading || hasLimitReached) return;
-
-    const searchOffset = Math.min(
-      (parkingSessionsList || []).length + 1,
-      sessionListLimit
-    );
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        `${InternalRoutes.SessionsList}?offset=${searchOffset}`,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.user?.accessToken}`,
-          },
-        }
-      );
-
-      const data: ParkingSessionsListResponse = await response.json();
-
-      setParkingSessionsList((prev) => [
-        ...(prev || []),
-        ...data.parkingSessions,
-      ]);
-
-      if (
-        parkingSessionsList &&
-        parkingSessionsList.length >= data.parkingSessionsTotalCount
-      ) {
-        setHasLimitReached(true);
-      }
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
+    if (!hasReachedLimit) {
+      await mutateAsync({ session });
     }
   };
 
   useEffect(() => {
-    setParkingSessionsList(parkingSessions?.parkingSessions);
-    setSessionListLimit(
-      parkingSessions?.parkingSessionsTotalCount || LIST_SEARCH_LIMIT
-    );
-  }, [parkingSessions]);
+    if (session) {
+      setAcessToken(session.user.accessToken);
+    }
+  }, [session]);
 
   return (
     <div className={styles.page}>
@@ -109,6 +62,7 @@ export const Page: NextPage<PageProps> = ({
             <ParkingList
               listResult={mapParkingList(parkingSessionsList || [])}
               fetchMore={handleFetchMore}
+              isLoading={isLoading || isFetchingMore}
             />
           )}
         </div>
@@ -146,31 +100,11 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
     return data.data.parkingSpaces;
   }
 
-  async function getParkingSessions() {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${ApiRoutes.GetSessionsList}?limit=${LIST_SEARCH_LIMIT}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.user?.accessToken}`,
-        },
-      }
-    );
-
-    const data: ApiResponse<ParkingSessionsListResponse> =
-      await response.json();
-
-    return data.data;
-  }
-
   try {
-    const [parkingSpaces, parkingSessions] = await Promise.all([
-      getParkingSpaces(),
-      getParkingSessions(),
-    ]);
+    const [parkingSpaces] = await Promise.all([getParkingSpaces()]);
     return {
       props: {
         parkingSpaces,
-        parkingSessions,
         session,
       },
     };

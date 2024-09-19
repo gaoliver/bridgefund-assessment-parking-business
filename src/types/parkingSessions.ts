@@ -18,6 +18,7 @@ export enum TableSessionType {
 }
 
 export type ParkingListResultProps = {
+  parkingSessionId: string;
   parkingSpace: string;
   sessionType: TableSessionType;
   status: Status;

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useEffect } from "react";
 import PageData from "@/data/dashboard.json";
 import styles from "./ParkingList.module.css";
 import { Button, Loader } from "@/components/atoms";
@@ -15,23 +15,25 @@ import {
   filterVehicleType,
   handleSortBy,
 } from "./functions";
-import useAppState from "@/zustand/state";
 import { LIST_SEARCH_LIMIT } from "@/constants/parkingSessions";
+import { useSessionEndParking } from "@/tanstack/mutations/sessionEndParking";
 
 interface ParkingListProps {
   listResult: ParkingListResultProps[];
+  isLoading: boolean;
   fetchMore?: () => void;
 }
 
 const getStatusColor = (status: Status) => {
-  return status === "Available" ? colors.green : colors.red;
+  return status === Status.Available ? colors.green : colors.red;
 };
 
 export const ParkingList: React.FC<ParkingListProps> = ({
   listResult = [],
+  isLoading,
   fetchMore,
 }) => {
-  const { isLoading } = useAppState();
+  const { mutateAsync, isPending } = useSessionEndParking();
   const { searchQuery, sessionType, sortBy, status, vehicleType } =
     useFilterStore();
 
@@ -61,7 +63,11 @@ export const ParkingList: React.FC<ParkingListProps> = ({
     }
   };
 
-  React.useEffect(() => {
+  const handleEndSession = async (id: string) => {
+    await mutateAsync({ parkingSessionId: id });
+  };
+
+  useEffect(() => {
     if (listResultFiltered.length < LIST_SEARCH_LIMIT && !isLoading) {
       fetchMore?.();
     }
@@ -104,7 +110,11 @@ export const ParkingList: React.FC<ParkingListProps> = ({
                 <td>{item.licensePlate}</td>
                 <td>
                   {item.status === Status.Occupied && (
-                    <Button color="danger">
+                    <Button
+                      color="danger"
+                      onClick={() => handleEndSession(item.parkingSessionId)}
+                      disabled={isPending}
+                    >
                       {PageData.list.columns.action.buttons.endParking}
                     </Button>
                   )}

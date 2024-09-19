@@ -16,7 +16,8 @@ export default async function handler(
   }
 
   try {
-    const { parkingSession } = body;
+    const { parkingSession } =
+      typeof body === "string" ? JSON.parse(body) : body;
 
     const response = await fetch(
       `${NEXT_PUBLIC_API_URL}${ApiRoutes.PostEndSession}`,
@@ -26,7 +27,7 @@ export default async function handler(
           "Content-Type": "application/json",
           Authorization: headers.authorization as string,
         },
-        body: JSON.stringify(parkingSession),
+        body: JSON.stringify({ parkingSession }),
       }
     );
 
