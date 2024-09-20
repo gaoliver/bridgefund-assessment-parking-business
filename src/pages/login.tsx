@@ -105,7 +105,11 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
   }
 
   return {
-    props: {},
+    props: {
+      seo: {
+        title: "Login",
+      }
+    },
   };
 };
 
