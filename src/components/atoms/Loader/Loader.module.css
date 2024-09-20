@@ -7,13 +7,13 @@
 }
 
 .spinner {
-  border: 8px solid transparent;
-  border-top: 8px solid var(--color-primary);
-  border-left: 8px solid var(--color-primary);
-  border-bottom: 8px solid var(--color-primary);
+  border: var(--spacing-xs) solid transparent;
+  border-top: var(--spacing-xs) solid var(--color-primary);
+  border-left: var(--spacing-xs) solid var(--color-primary);
+  border-bottom: var(--spacing-xs) solid var(--color-primary);
   border-radius: 100%;
-  width: 50px;
-  height: 50px;
+  width: 3.125rem;
+  height: 3.125rem;
   animation: spin 1s linear infinite;
 }
 

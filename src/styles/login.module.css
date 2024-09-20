@@ -9,17 +9,29 @@
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-sm);
   margin: var(--spacing-lg) 0;
 }
 
 .ctas {
   display: flex;
-  gap: 16px;
+  gap: var(--spacing-sm);
 }
 
 .error {
   color: var(--color-danger);
   font-weight: 400;
   margin-bottom: var(--spacing-sm);
+}
+
+.loader_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  margin-top: var(--spacing-sm);
+}
+
+.loader_wrapper div {
+  transform: scale(0.6);
 }
