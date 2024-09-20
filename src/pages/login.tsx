@@ -1,4 +1,4 @@
-import { Button, Card } from "@/components/atoms";
+import { Button, Card, Loader } from "@/components/atoms";
 import { TextInput } from "@/components/molecules";
 import styles from "@/styles/login.module.css";
 import { LoginWithPasswordDto } from "@/types/api";
@@ -18,6 +18,7 @@ const schema = yup.object().shape({
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Page: NextPage<PageProps> = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const { handleChange, values, handleSubmit } =
@@ -29,23 +30,26 @@ const Page: NextPage<PageProps> = () => {
       validationSchema: schema,
       validateOnChange: false,
       onSubmit: async (values) => {
+        setIsLoading(true);
+
         await signIn("credentials", {
           email: values.email,
           password: encrypt(values.password),
           callbackUrl: "/dashboard",
         }).catch((error) => {
           setErrorMessage(error.message);
+          setIsLoading(false);
         });
       },
     });
 
-    useEffect(() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const error = urlParams.get("error");
-      if (error) {
-        setErrorMessage(error);
-      }
-    }, []);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get("error");
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, []);
 
   return (
     <main className={styles.main}>
@@ -71,9 +75,15 @@ const Page: NextPage<PageProps> = () => {
         </div>
 
         {errorMessage && <span className={styles.error}>{errorMessage}</span>}
+
         <Button variant="primary" onClick={() => handleSubmit()}>
           Login
         </Button>
+        {isLoading && (
+          <div className={styles.loader_wrapper}>
+            <Loader />
+          </div>
+        )}
       </Card>
     </main>
   );
