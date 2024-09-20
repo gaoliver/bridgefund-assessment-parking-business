@@ -1,0 +1,28 @@
+.component {
+  display: flex;
+  flex-direction: column;
+}
+
+.component label {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.field_wrapper {
+  display: flex;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius-sm);
+}
+
+.field {
+  flex: 1;
+  border: none;
+  outline: none;
+  margin-right: 0.5rem;
+}
+
+.placeholder {
+  color: var(--color-gray-500);
+}

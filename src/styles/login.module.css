@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-primary-light);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: var(--spacing-lg) 0;
+}
+
+.ctas {
+  display: flex;
+  gap: 16px;
+}
+
+.error {
+  color: var(--color-danger);
+  font-weight: 400;
+  margin-bottom: var(--spacing-sm);
+}
