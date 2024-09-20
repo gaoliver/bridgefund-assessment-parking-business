@@ -31,3 +31,14 @@
   border: none;
   cursor: pointer;
 }
+
+.error {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.error_message {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  margin-top: var(--spacing-xxs);
+}

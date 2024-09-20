@@ -11,8 +11,8 @@ import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
+  email: yup.string().email().required("Email is required"),
+  password: yup.string().required("Password is required"),
 });
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -21,7 +21,7 @@ const Page: NextPage<PageProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { handleChange, values, handleSubmit } =
+  const { handleChange, values, handleSubmit, errors } =
     useFormik<LoginWithPasswordDto>({
       initialValues: {
         email: "",
@@ -64,6 +64,7 @@ const Page: NextPage<PageProps> = () => {
             placeholder="example@site.com"
             value={values.email}
             onChange={handleChange}
+            error={errors.email}
           />
           <TextInput
             label="Password"
@@ -71,6 +72,7 @@ const Page: NextPage<PageProps> = () => {
             type="password"
             value={values.password}
             onChange={handleChange}
+            error={errors.password}
           />
         </div>
 
@@ -79,6 +81,7 @@ const Page: NextPage<PageProps> = () => {
         <Button variant="primary" onClick={() => handleSubmit()}>
           Login
         </Button>
+
         {isLoading && (
           <div className={styles.loader_wrapper}>
             <Loader />
