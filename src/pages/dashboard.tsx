@@ -14,6 +14,7 @@ import { mapParkingList } from "@/utils/mapParkingList";
 import useAppState from "@/zustand/state";
 import { useSessionListIncrement } from "@/tanstack/mutations";
 import { useSessionListQuery } from "@/tanstack/queries";
+import PageData from "@/data/dashboard.json";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -106,6 +107,9 @@ export const getServerSideProps = async ({ req }: NextPageContext) => {
       props: {
         parkingSpaces,
         session,
+        seo: {
+          title: PageData.title,
+        },
       },
     };
   } catch (error) {
