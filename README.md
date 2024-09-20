@@ -47,6 +47,3 @@ yarn dev
 
 6. Open your browser and go to `http://localhost:3000` to see the project running.
 
-## FYI
-
-The project is incomplete and still have no responsivity.
