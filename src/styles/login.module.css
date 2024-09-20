@@ -9,13 +9,13 @@
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-sm);
   margin: var(--spacing-lg) 0;
 }
 
 .ctas {
   display: flex;
-  gap: 16px;
+  gap: var(--spacing-sm);
 }
 
 .error {

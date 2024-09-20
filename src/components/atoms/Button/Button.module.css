@@ -1,6 +1,6 @@
 .component {
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
   transition: var(--transition);
   border: none;
